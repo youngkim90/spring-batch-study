@@ -54,7 +54,8 @@ Spring 어플리케이션이 실행되고 있다..!
 위에서 언급하였던 메타데이터에 대해 좀 더 알아보자.
 
 ![Spring Batch 메타데이터 ERD](https://docs.spring.io/spring-batch/reference/_images/meta-data-erd.png)
-공식문서 참고: https://docs.spring.io/spring-batch/reference/schema-appendix.html
+
+*공식문서 참고: https://docs.spring.io/spring-batch/reference/schema-appendix.html*
 
 Spring Batch의 메타데이터 스키마는 배치 작업의 실행 기록을 추적하고, 재시작 시 상태를 관리하는 데 사용된다. 이 스키마는 주로 다음과 같은 주요 테이블들로 구성된다.
 
