@@ -4,14 +4,20 @@
 
 ---
 
-## 1. Spring Batch 초기화
+## 1. Spring Batch 초기화 및 의존성 추가
 
 먼저 스프링배치 프로젝트를 생성해야 한다. 기도님의 포스팅에서는 https://start.spring.io 에서 프로젝트를 생성하고 있다.  
 간단한 스프링 프로젝트 초기화는 IntelliJ IDE에서도 가능하기 때문에 나는 IDE로 프로젝트를 생성하였다.
 
 ![img.png](img.png)
 
-다음과 같이 프로젝트를 생성한 후에 터미널로 `gradle :bootRun` 명령어를 실행하였다.
+다음과 같이 프로젝트를 설정하고 **dependency**를 선택하는 부분에서 **spring-batch**를 선택한 후에 프로젝트를 생성하였다.
+
+![img_7.png](img_7.png)
+
+`build.gradle`에 위의 spring-batch 의존성이 잘 설정되어 있는 것을 확인할 수 있다.
+
+터미널로 `gradle :bootRun` 명령어를 실행해보자.
 
 ![img_1.png](img_1.png)
 
@@ -23,7 +29,7 @@
 
 ![img_2.png](img_2.png)
 
-`build.gradle`에 H2 database 의존성을 추가하였다.
+`build.gradle`에 H2 database 의존성을 추가하자.
 
 ![img_3.png](img_3.png)
 
@@ -31,7 +37,7 @@
 
 ## 3. Spring Batch Application 실행
 
-`gradle :bootRun` 명령어를 다시 실행하였다.
+`gradle :bootRun` 명령어를 다시 실행해보자.
 
 ![img_6.png](img_6.png)
 
@@ -40,7 +46,8 @@ Spring 어플리케이션이 실행되고 있다..!
 ![img_4.png](img_4.png)
 ![img_5.png](img_5.png)
 
-정상적으로 어플리케이션이 실행되고 빌드도 성공하였음을 확인할 수 있다.
+정상적으로 어플리케이션이 실행되고 빌드도 성공하는 것을 확인할 수 있다.  
+(어플리케이션이 실행되고 바로 종료된다. 스프링배치 어플리케이션에서는 실행할 배치 작업이 없으면 바로 종료되는 듯 하다..)
 
 ## 4. Spring Batch MetaData
 
