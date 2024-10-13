@@ -3,9 +3,7 @@ spring:
     name: batch-study
   # H2 Database
   datasource:
-    hikari:
-      maximum-pool-size: 10
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
+    url: jdbc:mysql://localhost:3306/study?serverTimezone=UTC&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${db_user}
+    password: ${db_password}
