@@ -223,19 +223,25 @@ ChunkContext에는 기본적인 Job,Step ExcutionContext 정보가 포함되어�
 스프링 배치가 실행되면서 기록된 MySQL DB 스프링배치 메타데이터도 확인할 수 있다.
 
 **BATCH_JOB_INSTANCE**
+
 ![img_3.png](img_3.png)
 
 **BATCH_JOB_EXECUTION**
+
 ![img_4.png](img_4.png)
 
 **BATCH_JOB_EXECUTION_CONTEXT**
+
 ![img_5.png](img_5.png)
 
 **BATCH_JOB_EXECUTION_PARAMS**
+
 ![img_6.png](img_6.png)
 
 **BATCH_STEP_EXECUTION**
+
 ![img_7.png](img_7.png)
 
 **BATCH_STEP_EXECUTION_CONTEXT**
+
 ![img_8.png](img_8.png)
