@@ -1,4 +1,4 @@
-package com.schooldevops.springbatch.batchstudy.jobs.flatfilereader;
+package com.schooldevops.springbatch.batchstudy.models;
 
 import lombok.Getter;
 import lombok.Setter;

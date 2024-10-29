@@ -1,4 +1,4 @@
-package com.schooldevops.springbatch.batchstudy.jobs.flatfilereader;
+package com.schooldevops.springbatch.batchstudy.quiz11;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,51 +19,54 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.schooldevops.springbatch.batchstudy.models.Customer;
+import com.schooldevops.springbatch.batchstudy.models.CompositeIndex;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-// @Configuration
-public class FlatFileItemJobConfig {
+@Configuration
+public class CompositeIndexJobConfig {
 
 	/**
 	 * CHUNK 크기를 지정한다.
 	 */
 	public static final int CHUNK_SIZE = 100;
-	public static final String ENCODING = "UTF-8";
+	public static final String ENCODING = "EUC-KR";
 	public static final String FLAT_FILE_WRITER_CHUNK_JOB = "FLAT_FILE_WRITER_CHUNK_JOB";
 
 	private ConcurrentHashMap<String, Integer> aggregateInfos = new ConcurrentHashMap<>();
 
-	private final ItemProcessor<Customer, Customer> itemProcessor = new AggregateCustomerProcessor(aggregateInfos);
+	// private final ItemProcessor<Customer, Customer> itemProcessor = new AggregateCustomerProcessor(aggregateInfos);
+	private final ItemProcessor<CompositeIndex, CompositeIndex> itemProcessor = new AggregateCompositeIndexProcessor(
+		aggregateInfos);
 
 	@Bean
-	public FlatFileItemReader<Customer> flatFileItemReader() {
+	public FlatFileItemReader<CompositeIndex> flatFileItemReader() {
 
-		return new FlatFileItemReaderBuilder<Customer>()
+		return new FlatFileItemReaderBuilder<CompositeIndex>()
 			.name("FlatFileItemReader")
-			.resource(new ClassPathResource("./customer.csv"))
+			.resource(new ClassPathResource("./composite_index.csv"))
 			.encoding(ENCODING)
 			.delimited().delimiter(",")
-			.names("name", "age", "gender")
-			.targetType(Customer.class)
+			.names("name", "index1", "index2", "index3", "index4", "index5", "index6")
+			.targetType(CompositeIndex.class)
+			.linesToSkip(1)
 			.build();
 	}
 
 	@Bean
-	public FlatFileItemWriter<Customer> flatFileItemWriter() {
+	public FlatFileItemWriter<CompositeIndex> flatFileItemWriter() {
 
-		return new FlatFileItemWriterBuilder<Customer>()
+		return new FlatFileItemWriterBuilder<CompositeIndex>()
 			.name("flatFileItemWriter")
-			.resource(new FileSystemResource("./output/customer_new.csv"))
+			.resource(new FileSystemResource("./output/composite_index_new.csv"))
 			.encoding(ENCODING)
 			.delimited().delimiter("\t")
-			.names("Name", "Age", "Gender")
+			.names("Ratio1", "Ratio2", "Ratio3", "Ratio4", "Ratio5")
 			.append(false)
-			.lineAggregator(new CustomerLineAggregator())
-			.headerCallback(new CustomerHeader())
-			.footerCallback(new CustomerFooter(aggregateInfos))
+			.lineAggregator(new CompositeIndexLineAggregator())
+			.headerCallback(new CompositeHeader())
+			// .footerCallback(new CustomerFooter(aggregateInfos))
 			.build();
 	}
 
@@ -72,7 +75,7 @@ public class FlatFileItemJobConfig {
 		log.info("------------------ Init flatFileStep -----------------");
 
 		return new StepBuilder("flatFileStep", jobRepository)
-			.<Customer, Customer>chunk(CHUNK_SIZE, transactionManager)
+			.<CompositeIndex, CompositeIndex>chunk(CHUNK_SIZE, transactionManager)
 			.reader(flatFileItemReader())
 			.processor(itemProcessor)
 			.writer(flatFileItemWriter())
@@ -82,6 +85,7 @@ public class FlatFileItemJobConfig {
 	@Bean
 	public Job flatFileJob(Step flatFileStep, JobRepository jobRepository) {
 		log.info("------------------ Init flatFileJob -----------------");
+
 		return new JobBuilder(FLAT_FILE_WRITER_CHUNK_JOB, jobRepository)
 			.incrementer(new RunIdIncrementer())
 			.start(flatFileStep)
