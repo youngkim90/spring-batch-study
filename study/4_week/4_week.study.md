@@ -4,7 +4,7 @@
 
 ---
 
-Spring Batch의 Chunk Model에 사용되는 `FlatFileItemReader`와 `FlatFileItemWriter`에 대해 알아보자.
+Spring Batch의 Chunk Model에 사용되는 `FlatFileItemReader`와 `FlatFileItemWriter`에 대해 알아보고 구현해보자.
 
 ## 1. FlatFileItemReader/FlatFileItemWriter 개요
 
