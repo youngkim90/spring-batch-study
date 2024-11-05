@@ -24,7 +24,7 @@ import com.schooldevops.springbatch.batchstudy.models.CompositeIndex;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class CompositeIndexJobConfig {
 
 	/**
