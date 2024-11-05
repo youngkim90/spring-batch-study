@@ -143,13 +143,16 @@ public class JdbcPagingReaderJobConfig {
 ### 실행 결과
 
 ![img_1.png](img_1.png)
+
 일단 customer 테이블을 생성하고 위와 같이 데이터를 추가한 후에 배치를 실행하였다.
 
 ![img.png](img.png)
+
 로그를 통해 **JDBC_PAGING_CHUNK_JOB**이 실행되어 `customerJdbcPagingStep`이 실행되는 것을 확인할 수 있었다.  
 읽어들인 데이터가 csv로 잘 저장되었는지 확인해보자.
 
 ![img_2.png](img_2.png)
+
 **customer_new_v1.csv** 파일이 생성되었고, 데이터가 잘 저장된 것을 확인할 수 있다.
 
 <br>
@@ -161,6 +164,7 @@ public class JdbcPagingReaderJobConfig {
 `JdbcBatchItemWriter`를 활용하여 **flatfile**에서 데이터를 읽어들인 후 **customer2** 테이블에 저장하는 로직을 구현해보자.
 
 ![img_3.png](img_3.png)
+
 읽어들일 **customer.csv** 파일을 생성해준다.
 
 ```sql
@@ -253,6 +257,7 @@ public class CustomerItemSqlParameterSourceProvider implements ItemSqlParameterS
 ### 실행 결과
 
 ![img_4.png](img_4.png)
+
 로그를 통해 **JDBC_BATCH_WRITER_CHUNK_JOB**이 실행되어 `flatFileStep`이 실행되는 것을 확인할 수 있었다.
 
 ```sql
@@ -263,4 +268,5 @@ from customer2;
 customer2 테이블에 데이터가 잘 들어갔는지 조회해보자.
 
 ![img_5.png](img_5.png)
+
 정상적으로 데이터가 저장된 것을 확인할 수 있다.
