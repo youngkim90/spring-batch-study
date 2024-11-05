@@ -3,7 +3,10 @@ spring:
     name: batch-study
   # H2 Database
   datasource:
-    url: jdbc:mysql://localhost:3306/study?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/study?serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true&clusterInstanceHostPattern=?&zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${db_user}
     password: ${db_password}
+  batch:
+    job:
+      name: JDBC_BATCH_WRITER_CHUNK_JOB

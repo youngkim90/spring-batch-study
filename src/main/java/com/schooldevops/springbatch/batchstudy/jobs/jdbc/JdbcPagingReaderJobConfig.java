@@ -30,7 +30,7 @@ import com.schooldevops.springbatch.batchstudy.models.Customer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class JdbcPagingReaderJobConfig {
 
 	/**
@@ -40,7 +40,7 @@ public class JdbcPagingReaderJobConfig {
 	public static final String ENCODING = "EUC-KR";
 	public static final String JDBC_PAGING_CHUNK_JOB = "JDBC_PAGING_CHUNK_JOB";
 
-	@Autowired
+	// @Autowired
 	DataSource dataSource;
 
 	@Bean
