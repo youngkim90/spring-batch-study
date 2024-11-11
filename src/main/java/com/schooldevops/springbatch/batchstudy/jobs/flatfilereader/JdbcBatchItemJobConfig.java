@@ -23,7 +23,7 @@ import com.schooldevops.springbatch.batchstudy.models.Customer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class JdbcBatchItemJobConfig {
 
 	/**
@@ -33,7 +33,7 @@ public class JdbcBatchItemJobConfig {
 	public static final String ENCODING = "UTF-8";
 	public static final String JDBC_BATCH_WRITER_CHUNK_JOB = "JDBC_BATCH_WRITER_CHUNK_JOB";
 
-	@Autowired
+	// @Autowired
 	DataSource dataSource;
 
 	@Bean

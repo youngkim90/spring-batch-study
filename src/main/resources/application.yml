@@ -7,6 +7,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${db_user}
     password: ${db_password}
-  batch:
-    job:
-      name: JDBC_BATCH_WRITER_CHUNK_JOB
+#  batch:
+#    job:
+#      name: JDBC_BATCH_WRITER_CHUNK_JOB
