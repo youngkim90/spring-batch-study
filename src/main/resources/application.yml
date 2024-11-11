@@ -7,6 +7,14 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${db_user}
     password: ${db_password}
-#  batch:
-#    job:
-#      name: JDBC_BATCH_WRITER_CHUNK_JOB
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    #    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+  batch:
+    job:
+      name: JPA_ITEM_WRITER_JOB

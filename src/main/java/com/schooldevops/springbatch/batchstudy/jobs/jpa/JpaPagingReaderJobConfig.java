@@ -24,7 +24,7 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class JpaPagingReaderJobConfig {
 
 	/**
@@ -34,7 +34,7 @@ public class JpaPagingReaderJobConfig {
 	public static final String ENCODING = "UTF-8";
 	public static final String JPA_PAGING_CHUNK_JOB = "JPA_PAGING_CHUNK_JOB";
 
-	@Autowired
+	// @Autowired
 	EntityManagerFactory entityManagerFactory;
 
 	@Bean
