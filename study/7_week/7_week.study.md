@@ -1,6 +1,6 @@
-# Spring Batch Study 6
+# Spring Batch Study 7
 
-참고: [DEVOCEAN KIDO님 SpringBatch 연재 6](https://devocean.sk.com/blog/techBoardDetail.do?ID=166932)
+참고: [DEVOCEAN KIDO님 SpringBatch 연재 7](https://devocean.sk.com/blog/techBoardDetail.do?ID=166932)
 
 ---
 
