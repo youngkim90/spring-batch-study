@@ -1,5 +1,7 @@
 package com.schooldevops.springbatch.batchstudy.jobs.mybatis;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.mybatis.spring.batch.builder.MyBatisPagingItemReaderBuilder;
@@ -11,19 +13,20 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.support.CompositeItemProcessor;
+import org.springframework.batch.item.support.builder.CompositeItemProcessorBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.schooldevops.springbatch.batchstudy.jobs.jpa.CustomerItemProcessor;
 import com.schooldevops.springbatch.batchstudy.models.Customer;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-// @Configuration
+@Configuration
 public class MyBatisReaderJobConfig {
 
 	/**
@@ -33,7 +36,7 @@ public class MyBatisReaderJobConfig {
 	public static final String ENCODING = "UTF-8";
 	public static final String MYBATIS_CHUNK_JOB = "MYBATIS_CHUNK_JOB";
 
-	// @Autowired
+	@Autowired
 	SqlSessionFactory sqlSessionFactory;
 
 	@Bean
@@ -58,6 +61,16 @@ public class MyBatisReaderJobConfig {
 	}
 
 	@Bean
+	public CompositeItemProcessor<Customer, Customer> compositeItemProcessor() {
+		return new CompositeItemProcessorBuilder<Customer, Customer>()
+			// delegates를 통해서 ItemProcessor가 수행할 순서대로 배열을 만들어 전달
+			.delegates(List.of(
+				new LowerCaseItemProcessor(),
+				new After20YearsItemProcessor()))
+			.build();
+	}
+
+	@Bean
 	public Step CustomerJdbcCursorStep(JobRepository jobRepository,
 		PlatformTransactionManager transactionManager) throws Exception {
 		log.info("------------------ Init CustomerJdbcCursorStep -----------------");
@@ -65,7 +78,7 @@ public class MyBatisReaderJobConfig {
 		return new StepBuilder("CustomerJdbcCursorStep", jobRepository)
 			.<Customer, Customer>chunk(CHUNK_SIZE, transactionManager)
 			.reader(myBatisItemReader())
-			.processor(new CustomerItemProcessor())
+			.processor(compositeItemProcessor())
 			.writer(CustomerCursorFlatFileItemWriter())
 			.build();
 	}
