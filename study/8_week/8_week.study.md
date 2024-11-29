@@ -4,7 +4,7 @@
 
 ---
 
-Spring Batch의 `CompositeItemProcessor` 으로 여러 단계에 걸쳐 데이터 Transform 해보자.
+Spring Batch의 `CompositeItemProcessor` 으로 여러 단계에 걸쳐 데이터를 Transform 하는 과정을 진행해본다.
 
 ## 1. CompositeItemProcessor
 
@@ -50,7 +50,6 @@ Spring Batch의 `CompositeItemProcessor` 으로 여러 단계에 걸쳐 데이�
 ## 2. CompositeItemProcessor 구현
 
 일단 순서대로 진행할 ItemProcessor를 구현하여 step에 적용시킨다.  
-스프링배치를 실행하여 DB에서 데이터를 읽어와 ItemProcessor가 순차적으로 진행되는지 확인해보자.
 
 ```java
 public class LowerCaseItemProcessor implements ItemProcessor<Customer, Customer> {
@@ -129,7 +128,7 @@ public class MyBatisReaderJobConfig {
 
 ![img.png](img.png)
 
-이제 스프링 배치를 실행해보자.
+이제 스프링배치를 실행하여 DB에서 데이터를 읽어와 ItemProcessor가 순차적으로 진행되는지 확인해보자.
 
 ![img_1.png](img_1.png)
 
