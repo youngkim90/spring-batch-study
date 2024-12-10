@@ -14,12 +14,11 @@ import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.schooldevops.springbatch.batchstudy.models.CompositeIndex;
+import com.schooldevops.springbatch.batchstudy.jobs.models.CompositeIndex;
 
 import lombok.extern.slf4j.Slf4j;
 

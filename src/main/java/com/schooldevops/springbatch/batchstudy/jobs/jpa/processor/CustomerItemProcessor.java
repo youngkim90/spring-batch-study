@@ -1,8 +1,8 @@
-package com.schooldevops.springbatch.batchstudy.jobs.jpa;
+package com.schooldevops.springbatch.batchstudy.jobs.jpa.processor;
 
 import org.springframework.batch.item.ItemProcessor;
 
-import com.schooldevops.springbatch.batchstudy.models.Customer;
+import com.schooldevops.springbatch.batchstudy.jobs.models.Customer;
 
 import lombok.extern.slf4j.Slf4j;
 

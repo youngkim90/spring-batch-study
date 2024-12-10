@@ -5,7 +5,7 @@
 
 <mapper namespace="com.schooldevops.springbatch.batchstudy.jobs">
 
-    <resultMap id="customerResult" type="com.schooldevops.springbatch.batchstudy.models.Customer">
+    <resultMap id="customerResult" type="com.schooldevops.springbatch.batchstudy.jobs.models.Customer">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="age" column="age"/>
@@ -18,7 +18,7 @@
         LIMIT #{_skiprows}, #{_pagesize}
     </select>
 
-    <insert id="insertCustomers" parameterType="com.schooldevops.springbatch.batchstudy.models.Customer">
+    <insert id="insertCustomers" parameterType="com.schooldevops.springbatch.batchstudy.jobs.models.Customer">
         INSERT INTO customer2(name, age, gender) VALUES (#{name}, #{age}, #{gender});
     </insert>
 </mapper>

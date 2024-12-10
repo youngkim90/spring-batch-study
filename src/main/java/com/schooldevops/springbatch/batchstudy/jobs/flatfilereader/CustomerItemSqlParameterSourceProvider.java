@@ -4,7 +4,7 @@ import org.springframework.batch.item.database.ItemSqlParameterSourceProvider;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import com.schooldevops.springbatch.batchstudy.models.Customer;
+import com.schooldevops.springbatch.batchstudy.jobs.models.Customer;
 
 public class CustomerItemSqlParameterSourceProvider implements ItemSqlParameterSourceProvider<Customer> {
 	@Override

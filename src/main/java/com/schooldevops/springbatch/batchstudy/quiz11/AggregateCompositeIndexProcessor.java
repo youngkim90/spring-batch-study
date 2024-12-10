@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.batch.item.ItemProcessor;
 
-import com.schooldevops.springbatch.batchstudy.models.CompositeIndex;
+import com.schooldevops.springbatch.batchstudy.jobs.models.CompositeIndex;
 
 import lombok.extern.slf4j.Slf4j;
 

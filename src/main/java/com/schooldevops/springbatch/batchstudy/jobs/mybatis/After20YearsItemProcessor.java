@@ -2,7 +2,7 @@ package com.schooldevops.springbatch.batchstudy.jobs.mybatis;
 
 import org.springframework.batch.item.ItemProcessor;
 
-import com.schooldevops.springbatch.batchstudy.models.Customer;
+import com.schooldevops.springbatch.batchstudy.jobs.models.Customer;
 
 public class After20YearsItemProcessor implements ItemProcessor<Customer, Customer> {
 

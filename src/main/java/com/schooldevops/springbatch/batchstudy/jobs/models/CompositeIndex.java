@@ -1,4 +1,4 @@
-package com.schooldevops.springbatch.batchstudy.models;
+package com.schooldevops.springbatch.batchstudy.jobs.models;
 
 import lombok.Getter;
 import lombok.Setter;

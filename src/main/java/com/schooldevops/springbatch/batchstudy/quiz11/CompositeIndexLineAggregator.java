@@ -2,8 +2,7 @@ package com.schooldevops.springbatch.batchstudy.quiz11;
 
 import org.springframework.batch.item.file.transform.LineAggregator;
 
-import com.schooldevops.springbatch.batchstudy.models.CompositeIndex;
-import com.schooldevops.springbatch.batchstudy.models.Customer;
+import com.schooldevops.springbatch.batchstudy.jobs.models.CompositeIndex;
 
 public class CompositeIndexLineAggregator implements LineAggregator<CompositeIndex> {
 	@Override
