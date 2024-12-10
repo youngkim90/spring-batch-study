@@ -28,6 +28,8 @@ Spring Batch의 Flow Controller 방법에 대해 알아보자.
 
 ## 2. Flow Controller 구현
 
+**next, on, stop**을 활용하는 Flow Controller를 구현해보자.
+
 ### next
 
 **next**는 start 스텝이 수행하고 난 뒤, next 스텝으로 이동하게 된다.
