@@ -26,7 +26,7 @@ import com.schooldevops.springbatch.batchstudy.jobs.models.Customer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class MyBatisReaderJobConfig {
 
 	/**
@@ -36,7 +36,7 @@ public class MyBatisReaderJobConfig {
 	public static final String ENCODING = "UTF-8";
 	public static final String MYBATIS_CHUNK_JOB = "MYBATIS_CHUNK_JOB";
 
-	@Autowired
+	// @Autowired
 	SqlSessionFactory sqlSessionFactory;
 
 	@Bean
