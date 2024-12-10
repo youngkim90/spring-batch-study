@@ -225,7 +225,7 @@ public class QueryDSLPagingReaderJobConfig {
 		PlatformTransactionManager transactionManager) throws Exception {
 		log.info("------------------ Init customerQuerydslPagingStep -----------------");
 
-		return new StepBuilder("customerJpaPagingStep", jobRepository)
+		return new StepBuilder("customerQuerydslPagingStep", jobRepository)
 			.<Customer, Customer>chunk(CHUNK_SIZE, transactionManager)
 			.reader(customerQuerydslPagingItemReader())
 			.processor(new CustomerItemProcessor())
@@ -235,7 +235,7 @@ public class QueryDSLPagingReaderJobConfig {
 
 	@Bean
 	public Job customerQuerydslPagingJob(Step customerQuerydslPagingStep, JobRepository jobRepository) {
-		log.info("------------------ Init customerJpaPagingJob -----------------");
+		log.info("------------------ Init customerQuerydslPagingJob -----------------");
 		return new JobBuilder(QUERYDSL_PAGING_CHUNK_JOB, jobRepository)
 			.incrementer(new RunIdIncrementer())
 			.start(customerQuerydslPagingStep)
@@ -265,6 +265,10 @@ chunkSize가 2이므로 2개씩 데이터를 읽어올 것이다.
 customer_new_v2.csv 파일도 생성되어 데이터가 잘 저장된 것을 확인할 수 있다.
 
 ![img_2.png](img_2.png)
+
+<br>
+
+---
 
 ## 3. Custom ItemWriter
 
