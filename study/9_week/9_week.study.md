@@ -265,3 +265,153 @@ chunkSize가 2이므로 2개씩 데이터를 읽어올 것이다.
 customer_new_v2.csv 파일도 생성되어 데이터가 잘 저장된 것을 확인할 수 있다.
 
 ![img_2.png](img_2.png)
+
+## 3. Custom ItemWriter
+
+### CustomItemWriter 개요
+
+- `CustomItemWriter`는 Spring Batch에서 제공하는 기본 ItemWriter 인터페이스를 구현하여 직접 작성한 ItemWriter 클래스이다.
+- 기본 ItemWriter 클래스로는 제공되지 않는 특정 기능을 구현할 때 사용된다.
+
+### 주요 구성 요소
+
+- **ItemWriter 인터페이스 구현** : write() 메소드를 구현하여 원하는 처리를 수행한다.
+- **필요한 라이브러리 및 객체 선언** : 사용할 라이브러리 및 객체를 선언한다.
+- **데이터 처리 로직 구현** : write() 메소드에서 데이터 처리 로직을 구현한다.
+
+### 장점
+
+- **유연성**: 기본 ItemWriter 클래스로는 제공되지 않는 특정 기능을 구현할 수 있다.
+- **확장성**: 다양한 방식으로 데이터 처리를 확장할 수 있다.
+- **제어 가능성**: 데이터 처리 과정을 완벽하게 제어할 수 있다.
+
+### 단점
+
+- **개발 복잡성**: 기본 ItemWriter 클래스보다 개발 과정이 더 복잡하다.
+- **테스트 어려움**: 테스트 작성이 더 어려울 수 있다.
+- **디버깅 어려움**: 문제 발생 시 디버깅이 더 어려울 수 있다.
+
+## 4. Custom ItemWriter 구현
+
+### CustomService 구현
+
+먼저 청크 아이템을 받아서 호출하는 서비스를 구현한다.
+
+```java
+
+@Slf4j
+@Service
+public class CustomService {
+
+	public Map<String, String> processToOtherService(Customer item) {
+
+		log.info("Call API to OtherService....");
+
+		return Map.of("code", "200", "message", "OK");
+	}
+}
+```
+
+- 일반적인 서비스 객체를 하나 만들었다. 데이터를 저장하진 않고 단순히 log 정보를 출력하고 Map결과를 반환하는 역할이다.
+
+### CustomItemWriter 구현
+
+ItemWriter 인터페이스를 구현하여 CustomItemWriter를 구현한다.
+
+```java
+
+@Slf4j
+@Component
+public class CustomItemWriter implements ItemWriter<Customer> {
+
+	private final CustomService customService;
+
+	public CustomItemWriter(CustomService customService) {
+		this.customService = customService;
+	}
+
+	@Override
+	public void write(Chunk<? extends Customer> chunk) {
+		for (Customer customer : chunk) {
+			log.info("Call Porcess in CustomItemWriter...");
+			customService.processToOtherService(customer);
+		}
+	}
+}
+```
+
+- 이전에 만든 `CustomService`를 생성자 파라미터로 받고, write 메소드를 구현하였다.
+- write() 메소드는 우리가 작성할 ItemWriter의 핵심 메소드이다.
+- Chunk는 Customer 객체를 한묶음으로 처리할수 있도록 for문으로 반복 수행한다.
+- 메소드 내부에서 **processToOtherSerive**를 호출한다.
+
+### MybatisItemWriterJobConfig 구현
+
+```java
+
+@Slf4j
+@Configuration
+public class MybatisItemWriterJobConfig {
+
+	/**
+	 * CHUNK 크기를 지정한다.
+	 */
+	public static final int CHUNK_SIZE = 100;
+	public static final String ENCODING = "UTF-8";
+	public static final String MY_BATIS_ITEM_WRITER = "MY_BATIS_ITEM_WRITER";
+
+	@Autowired
+	CustomItemWriter customItemWriter;
+
+	@Bean
+	public FlatFileItemReader<Customer> flatFileItemReader() {
+
+		return new FlatFileItemReaderBuilder<Customer>()
+			.name("FlatFileItemReader")
+			.resource(new ClassPathResource("./customer.csv"))
+			.encoding(ENCODING)
+			.delimited().delimiter(",")
+			.names("name", "age", "gender")
+			.targetType(Customer.class)
+			.build();
+	}
+
+	@Bean
+	public Step flatFileStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+		log.info("------------------ Init flatFileStep -----------------");
+
+		return new StepBuilder("flatFileStep", jobRepository)
+			.<Customer, Customer>chunk(CHUNK_SIZE, transactionManager)
+			.reader(flatFileItemReader())
+			.writer(customItemWriter)
+			.build();
+	}
+
+	@Bean
+	public Job flatFileJob(Step flatFileStep, JobRepository jobRepository) {
+		log.info("------------------ Init flatFileJob -----------------");
+		return new JobBuilder(MY_BATIS_ITEM_WRITER, jobRepository)
+			.incrementer(new RunIdIncrementer())
+			.start(flatFileStep)
+			.build();
+	}
+}
+```
+
+- `FlatFileItemReader` 빈을 생성하고 **customer.csv** 파일을 읽어온다.
+- `CustomItemWriter` 빈을 주입받아 Step에 ItemWriter로 등록한다.
+- `Job`, `Step` 빈을 생성하고 **chunk**, **reader**, **writer**를 설정한다.
+
+### 실행 결과
+
+먼저 customer.csv 파일을 확인해보자.
+
+![img_3.png](img_3.png)
+
+4개의 데이터 목록이 있다.
+
+스프링배치를 실행하여 `flatFileStep`을 실행시켜보자.
+
+![img_4.png](img_4.png)
+
+로그를 확인해보면 4개의 chunk 데이터를 `CustomItemWriter`에서 반복문을 통해 ` CustomService.processToOtherService()`를 반복 호출한 것을 확인할 수 있다. 

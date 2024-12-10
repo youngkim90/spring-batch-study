@@ -26,7 +26,7 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class QueryDSLPagingReaderJobConfig {
 
 	/**
@@ -36,7 +36,7 @@ public class QueryDSLPagingReaderJobConfig {
 	public static final String ENCODING = "UTF-8";
 	public static final String QUERYDSL_PAGING_CHUNK_JOB = "QUERYDSL_PAGING_CHUNK_JOB";
 
-	@Autowired
+	// @Autowired
 	EntityManagerFactory entityManagerFactory;
 
 	@Bean
