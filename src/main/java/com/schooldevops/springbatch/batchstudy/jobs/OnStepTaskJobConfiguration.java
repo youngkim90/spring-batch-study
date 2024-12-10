@@ -12,7 +12,6 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,32 +19,26 @@ import org.springframework.transaction.PlatformTransactionManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class OnStepTaskJobConfiguration {
 
 	public static final String ON_STEP_TASK = "ON_STEP_TASK";
-
-	@Autowired
-	PlatformTransactionManager transactionManager;
 
 	@Bean(name = "stepOn01")
 	public Step stepOn01(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
 		log.info("------------------ Init myStep -----------------");
 
 		return new StepBuilder("stepOn01", jobRepository)
-			.tasklet(new Tasklet() {
-				@Override
-				public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-					log.info("Execute Step 01 Tasklet ...");
+			.tasklet((contribution, chunkContext) -> {
+				log.info("Execute Step 01 Tasklet ...");
 
-					Random random = new Random();
-					int randomValue = random.nextInt(1000);
+				Random random = new Random();
+				int randomValue = random.nextInt(1000);
 
-					if (randomValue % 2 == 0) {
-						return RepeatStatus.FINISHED;
-					} else {
-						throw new RuntimeException("Error This value is Odd: " + randomValue);
-					}
+				if (randomValue % 2 == 0) {
+					return RepeatStatus.FINISHED;
+				} else {
+					throw new RuntimeException("Error This value is Odd: " + randomValue);
 				}
 			}, transactionManager)
 			.build();

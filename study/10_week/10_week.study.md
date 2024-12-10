@@ -96,27 +96,21 @@ public class OnStepTaskJobConfiguration {
 
 	public static final String ON_STEP_TASK = "ON_STEP_TASK";
 
-	@Autowired
-	PlatformTransactionManager transactionManager;
-
 	@Bean(name = "stepOn01")
 	public Step stepOn01(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
 		log.info("------------------ Init myStep -----------------");
 
 		return new StepBuilder("stepOn01", jobRepository)
-			.tasklet(new Tasklet() {
-				@Override
-				public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-					log.info("Execute Step 01 Tasklet ...");
+			.tasklet((contribution, chunkContext) -> {
+				log.info("Execute Step 01 Tasklet ...");
 
-					Random random = new Random();
-					int randomValue = random.nextInt(1000);
+				Random random = new Random();
+				int randomValue = random.nextInt(1000);
 
-					if (randomValue % 2 == 0) {
-						return RepeatStatus.FINISHED;
-					} else {
-						throw new RuntimeException("Error This value is Odd: " + randomValue);
-					}
+				if (randomValue % 2 == 0) {
+					return RepeatStatus.FINISHED;
+				} else {
+					throw new RuntimeException("Error This value is Odd: " + randomValue);
 				}
 			}, transactionManager)
 			.build();
@@ -160,9 +154,9 @@ public class OnStepTaskJobConfiguration {
 }
 ```
 
-- **step01**을 먼저 수행하고, 결과에 따라서 다음 스텝으로 이동하는 플로우를 보여준다.
-- on("FAILED")인 경우 **step03**을 수행하도록 한다.
-- from(step01).on("COMPLETED")인 경우 step02를 수행하도록 한다.
+- **stepOn01**을 먼저 수행하고, 결과에 따라서 다음 스텝으로 이동하는 플로우를 보여준다.
+- on("FAILED")인 경우 **stepOn03**을 수행하도록 한다.
+- from(stepOn01).on("COMPLETED")인 경우 stepOn02 수행하도록 한다.
 - on과 from을 통해서 스텝의 종료 조건에 따라 원하는 플로우를 처리할 수 있다.
 
 ### stop
@@ -176,9 +170,6 @@ public class OnStepTaskJobConfiguration {
 public class StopStepTaskJobConfiguration {
 
 	public static final String STOP_STEP_TASK = "STOP_STEP_TASK";
-
-	@Autowired
-	PlatformTransactionManager transactionManager;
 
 	@Bean(name = "stepStop01")
 	public Step stepStop01(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
@@ -213,17 +204,50 @@ public class StopStepTaskJobConfiguration {
 	}
 
 	@Bean
-	public Job stopStepJob(Step stepOn01, Step stepOn02, Step stepOn03, JobRepository jobRepository) {
+	public Job stopStepJob(Step stepStop01, Step stepStop02, JobRepository jobRepository) {
 		log.info("------------------ Init myJob -----------------");
 		return new JobBuilder(STOP_STEP_TASK, jobRepository)
 			.incrementer(new RunIdIncrementer())
-			.start(stepOn01)
+			.start(stepStop01)
 			.on("FAILED").stop()
-			.from(stepOn01).on("COMPLETED").to(stepOn02)
+			.from(stepStop01).on("COMPLETED").to(stepStop02)
 			.end()
 			.build();
 	}
 }
 ```
 
-- **stepOn01**의 결과가 실패인경우 stop()을 통해 배치 작업을 정지하고 있다.
+- **stepStop01**의 결과가 실패인경우 stop()을 통해 배치 작업을 정지하고 있다.
+- from(stepStop01).on("COMPLETED")인 경우 **stepStop02**를 수행하도록 한다.
+
+### 실행 결과
+
+**nextStepJob 실행 결과**
+
+![img.png](img.png)
+
+step01이 수행되고, step02가 수행되는 것을 확인할 수 있다.
+
+**onStepJob 실행 결과**
+
+stepOn01이 수행 중에 아래처럼 Exception이 발생하면 stepOn03이 수행된다.
+
+![img_2.png](img_2.png)
+
+![img_4.png](img_4.png)
+
+정상적으로 stepOn01이 완료되면 stepOn02가 수행되는 것을 확인할 수 있다.
+
+![img_3.png](img_3.png)
+
+**stopStepJob 실행 결과**
+
+stepStop01이 수행 중에 아래처럼 Exception이 발생하면 Job이 종료되는 것을 확인할 수 있다.
+
+![img_5.png](img_5.png)
+
+![img_6.png](img_6.png)
+
+정상적으로 stepStop01이 완료되면 stepStop02가 수행되는 것을 확인할 수 있다.
+
+![img_7.png](img_7.png)

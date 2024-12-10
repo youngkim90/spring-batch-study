@@ -22,9 +22,6 @@ public class StopStepTaskJobConfiguration {
 
 	public static final String STOP_STEP_TASK = "STOP_STEP_TASK";
 
-	@Autowired
-	PlatformTransactionManager transactionManager;
-
 	@Bean(name = "stepStop01")
 	public Step stepStop01(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
 		log.info("------------------ Init myStep -----------------");
@@ -58,13 +55,13 @@ public class StopStepTaskJobConfiguration {
 	}
 
 	@Bean
-	public Job stopStepJob(Step stepOn01, Step stepOn02, Step stepOn03, JobRepository jobRepository) {
+	public Job stopStepJob(Step stepStop01, Step stepStop02, JobRepository jobRepository) {
 		log.info("------------------ Init myJob -----------------");
 		return new JobBuilder(STOP_STEP_TASK, jobRepository)
 			.incrementer(new RunIdIncrementer())
-			.start(stepOn01)
+			.start(stepStop01)
 			.on("FAILED").stop()
-			.from(stepOn01).on("COMPLETED").to(stepOn02)
+			.from(stepStop01).on("COMPLETED").to(stepStop02)
 			.end()
 			.build();
 	}

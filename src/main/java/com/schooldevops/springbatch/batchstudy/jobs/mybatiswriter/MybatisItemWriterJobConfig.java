@@ -22,7 +22,7 @@ import com.schooldevops.springbatch.batchstudy.jobs.models.Customer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+// @Configuration
 public class MybatisItemWriterJobConfig {
 
 	/**
@@ -32,7 +32,7 @@ public class MybatisItemWriterJobConfig {
 	public static final String ENCODING = "UTF-8";
 	public static final String MY_BATIS_ITEM_WRITER = "MY_BATIS_ITEM_WRITER";
 
-	@Autowired
+	// @Autowired
 	CustomItemWriter customItemWriter;
 
 	@Bean
